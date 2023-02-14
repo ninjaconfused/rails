@@ -1,35 +1,10 @@
 jobs:
   build:
     steps:
-      - run: echo "This is a build step"    # similar to "script" in GitLab
-
-  test:
-    steps:
-      - run: echo "This is a test step"
-
-  integration:
-    steps:
-      - run:
-          command: |
-            echo "This is an integration step"
-            exit 1
-
-  prod:
-    steps:
-      - run: echo "This is a deploy step."
-
+      - run: echo "This is a build step"    # similar to "script" in GitLa
+      
 workflows:
   version: 2
   rails:
     jobs:
       - build
-      - test:
-          requires:
-            - build 
-      - integration:
-          requires:
-            - test
-      - prod:
-          type: approval
-          requires:
-            - integration
