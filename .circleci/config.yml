@@ -15,10 +15,12 @@ jobs:
     - checkout
 
     - run: docker run --rm -v $(pwd):/src -w /src hysnsec/bundle-audit check --format json --output bundle-audit-output.json
+      when: on_fail
 
     - store_artifacts:
         path: bundle-audit-output.json
         destination: bundler-audit-artifact
+        when: always
 
   integration:
     steps:
@@ -41,6 +43,9 @@ workflows:
       - test:
           requires:
             - build 
+      - bundler-audit:
+          requires:
+            - test
       - integration:
           requires:
             - test
