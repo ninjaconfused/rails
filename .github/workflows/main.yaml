@@ -20,6 +20,22 @@ jobs:
       - uses: actions/checkout@v2
 
       - run: echo "This is a test step"
+  
+  bundler-audit:
+    runs-on: ubuntu-20.04
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      
+      - run: docker run --vm -v $(pwd):/src -w /src hysnsec/bundle-audit check --format json --output bundle-audit-output.json
+        continue-on-error: true
+      
+      - uses: actions/upload-artifact@v2
+        with:
+          name: bundle-audit
+          path: bundle-audit-output.json
+        if: always()
+      
 
   integration:
     runs-on: ubuntu-20.04
